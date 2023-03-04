@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using NZWalks.API.Data;
+using NZWalks.API.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +11,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//adding DI for Dbcontext class
+builder.Services.AddDbContext<NZWalksDbContext>(options => {
+    options.UseSqlServer(builder.Configuration.GetConnectionString("NZWalks"));
+});
+// injecting repo
+builder.Services.AddScoped<IRegionRepository, RegionRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
